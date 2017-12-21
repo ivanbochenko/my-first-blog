@@ -13,4 +13,24 @@
         <h1>{{ post.title }}</h1>
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
+    {% if user.is_authenticated %}
+    <div>
+      <a class="btn btn-default" href="{% url 'add_like' pk=post.pk %}"><span class="glyphicon glyphicon-thumbs-up">{{ object.likes }}</span></a>
+      <a class="btn btn-default" href="{% url 'add_dislike' pk=post.pk %}"><span class="glyphicon glyphicon-thumbs-down">{{ object.dislikes }}</span></a>
+    </div>
+    {% endif %}
+    <!-- Comments field -->
+    {% if user.is_authenticated %}
+    <hr>
+    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+        {% for comment in post.comments.all %}
+            <div class="comment">
+                <div class="date">{{ comment.created_date }}</div>
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text|linebreaks }}</p>
+            </div>
+        {% empty %}
+            <p>No comments here yet :(</p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
